@@ -1,2 +1,2 @@
 # boomerang-cache
-Boomerang cache is a local storage helper library.
+boomerangCache is a client side caching library based on localStorage
