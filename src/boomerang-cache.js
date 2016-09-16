@@ -47,7 +47,11 @@
         },
 
         removeItem: function (key) {
-            localStorage.removeItem(key);
+            return localStorage.removeItem(key);
+        },
+
+        clear: function () {
+            localStorage.clear();
         }
     };
 
@@ -58,16 +62,28 @@
         }
     }
 
-    Boomerang.prototype.get = function (key) {
-        return api.getItem(key);
+    Boomerang.prototype.get = function (key, defaultValue) {
+        var value = api.getItem(key);
+
+        return (typeof value !== 'undefined') ? value : defaultValue;
     };
 
     Boomerang.prototype.set = function (key, value) {
+
+        if (typeof value === 'undefined') {
+            return api.removeItem(key);
+        }
+
         api.setItem(key, value);
+        return value;
+    };
+
+    Boomerang.prototype.clear = function () {
+        api.clear();
     };
 
     Boomerang.prototype.remove = function (key) {
-        api.removeItem(key);
+        return api.removeItem(key);
     };
 
     Boomerang.prototype.check = function () {

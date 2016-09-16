@@ -8,7 +8,7 @@
   },
   "scripts": {
     "pretest": "./node_modules/.bin/grunt browserify",
-    "test": "./node_modules/.bin/testem ci",
+    "test": "./node_modules/.bin/testem -l Chrome ci",
     "postinstall": "./node_modules/.bin/grunt uglify"
   },
   "repository": {

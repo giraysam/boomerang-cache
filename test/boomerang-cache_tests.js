@@ -39,4 +39,13 @@ suite('boomerang-cache', function () {
         boomerang.remove(key);
         assert.equal(boomerang.get(key), null, 'We expect value to be null');
     });
+
+    test('Testing clear()', function() {
+        var key = 'boomerang_key',
+            value = "boomerang_value";
+
+        boomerang.set(key, value);
+        boomerang.clear();
+        assert.equal(boomerang.get(key), null, 'We expect value to be null');
+    });
 });
