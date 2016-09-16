@@ -1,6 +1,9 @@
 module.exports = function (grunt) {
 
     grunt.initConfig({
+        browserify: {
+            'test/browserified.js': ['test/boomerang-cache_tests.js']
+        },
         uglify: {
             options: {
                 mangle: false,
@@ -15,8 +18,10 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    grunt.registerTask("default", ['uglify']);
+
+    grunt.registerTask("default", ['browserify', 'uglify']);
 
 };

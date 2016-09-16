@@ -26,7 +26,7 @@ suite('boomerang-cache', function () {
 
         boomerang.set(key, value);
 
-        if (boomerang.isAvailable()) {
+        if (boomerang.check()) {
             assert.equal(boomerang.get(key), value, "We expect value to be " + value);
         }
     });

@@ -14,64 +14,69 @@
         root.BoomerangCache = factory(root, {});
     }
 
-}(this, function (root, BoomerangCache) {
+}(this, function () {
     'use strict';
-    
-    function isAvailable() {
-        var key = '__boomerangCache__',
-            value = 'boomerang';
 
-        try {
-            localStorage.setItem(key, value);
+    var api = api || {};
+
+    api = {
+
+        check: function () {
+
+            var key = '__boomerangCache__',
+                value = 'boomerang';
+
+            try {
+                localStorage.setItem(key, value);
+                localStorage.removeItem(key);
+                return true;
+            }
+            catch (exc) {
+                console.log('error');
+                return false;
+            }
+        },
+
+        getItem: function (key) {
+            return localStorage.getItem(key);
+        },
+
+        setItem: function (key, value) {
             localStorage.removeItem(key);
-            return true;
+            localStorage.setItem(key, value);
+        },
+
+        removeItem: function (key) {
+            localStorage.removeItem(key);
         }
-        catch (exc) {
-            console.log('error');
-            return false;
-        }
-    }
+    };
 
-    function getItem(key) {
-        return localStorage.getItem(key);
-    }
+    function Boomerang (store) {
 
-    function setItem(key, value) {
-        localStorage.removeItem(key);
-        localStorage.setItem(key, value);
-    }
-
-    function removeItem(key) {
-        localStorage.removeItem(key);
-    }
-
-    root.boomerang = function (store) {
-
-        if (this.isAvailable()) {
+        if (api.check()) {
             this._store = store;
         }
+    }
+
+    Boomerang.prototype.get = function (key) {
+        return api.getItem(key);
     };
 
-    root.boomerang.prototype.get = function (key) {
-        return getItem(key);
+    Boomerang.prototype.set = function (key, value) {
+        api.setItem(key, value);
     };
 
-    root.boomerang.prototype.set = function (key, value) {
-        setItem(key, value);
+    Boomerang.prototype.remove = function (key) {
+        api.removeItem(key);
     };
 
-    root.boomerang.prototype.remove = function (key) {
-        removeItem(key);
+    Boomerang.prototype.check = function () {
+        return api.check();
     };
 
-    root.boomerang.prototype.isAvailable = function () {
-
-        return isAvailable();
+    api.create = function (store) {
+        return new Boomerang(store);
     };
 
-    BoomerangCache.create = function (store) {
-        return new root.boomerang(store);
-    };
-
-    return BoomerangCache;
+    return api;
 }));
