@@ -41,5 +41,27 @@ describe('Core -', function () {
         boomerang.clear();
         assert.equal(boomerang.get(key), null, 'We expect value to be null');
     });
+
+    it('Testing arrays with set() and get()', function() {
+        var key = 'boomerang_array',
+            value = [{value: "boomerang_value"}];
+
+        boomerang.set(key, value);
+
+        if (boomerang.check()) {
+            assert.deepEqual(boomerang.getObject(key), value, "We expect type of value to be " + typeof(value));
+        }
+    });
+
+    it('Testing objects with set() and get()', function() {
+        var key = 'boomerang_object',
+            value = {value: "boomerang_value"};
+
+        boomerang.set(key, value);
+
+        if (boomerang.check()) {
+            assert.deepEqual(boomerang.getObject(key), value, "We expect type of value to be " + typeof(value));
+        }
+    });
 });
 
