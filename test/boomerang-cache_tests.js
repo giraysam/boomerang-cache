@@ -29,10 +29,7 @@ describe('LocalStorage Tests', function () {
             value = "boomerang_value";
 
         boomerang.set(key, value);
-
-        if (boomerang.check()) {
-            assert.equal(boomerang.get(key), value, "We expect value to be " + value);
-        }
+        assert.equal(boomerang.get(key), value, "We expect value to be " + value);
     });
 
     it('Testing getAll()', function () {
@@ -74,10 +71,7 @@ describe('LocalStorage Tests', function () {
             value = [{value: "boomerang_value"}];
 
         boomerang.set(key, value);
-
-        if (boomerang.check()) {
-            assert.deepEqual(boomerang.getObject(key), value, "We expect type of value to be " + typeof(value));
-        }
+        assert.deepEqual(boomerang.getObject(key), value, "We expect type of value to be " + typeof(value));
     });
 
     it('Testing objects with set() and get()', function() {
@@ -85,10 +79,7 @@ describe('LocalStorage Tests', function () {
             value = {value: "boomerang_value"};
 
         boomerang.set(key, value);
-
-        if (boomerang.check()) {
-            assert.deepEqual(boomerang.getObject(key), value, "We expect type of value to be " + typeof(value));
-        }
+        assert.deepEqual(boomerang.getObject(key), value, "We expect type of value to be " + typeof(value));
     });
 });
 
