@@ -8,7 +8,21 @@ catch (ex) {
     console.log(ex);
 }
 
-describe('Core -', function () {
+describe('LocalStorage -', function () {
+
+    before(function() {
+        try {
+            localStorage.clear();
+        }
+        catch (ex) {}
+    });
+
+    after(function() {
+        try {
+            localStorage.clear();
+        }
+        catch (ex) {}
+    });
 
     it('Testing set() and get()', function () {
         var key = "boomerang_key",
