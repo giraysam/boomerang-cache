@@ -58,6 +58,18 @@
             localStorage.removeItem(key);
             localStorage.setItem(key, value);
         },
+        
+        getAll: function () {
+            var keys = Object.keys(localStorage),
+                values = {},
+                i = keys.length;
+
+            while(i--) {
+                values[keys[i]] = localStorage.getItem(keys[i]);
+            }
+
+            return values;
+        },
 
         getObject: function (key) {
             var obj = localStorage.getItem(key);
@@ -115,20 +127,6 @@
         }
     }
 
-    Boomerang.prototype.get = function (key, defaultValue) {
-
-        var value = this.factory.getItem(key);
-
-        return (typeof value !== 'undefined') ? value : defaultValue;
-    };
-
-    Boomerang.prototype.getObject = function (key, defaultValue) {
-
-        var value = this.factory.getObject(key);
-
-        return (typeof value !== 'undefined') ? value : defaultValue;
-    };
-
     Boomerang.prototype.set = function (key, value) {
 
         if (typeof value === 'undefined') {
@@ -144,6 +142,25 @@
         // if value is string
         this.factory.setItem(key, value);
         return value;
+    };
+
+    Boomerang.prototype.get = function (key, defaultValue) {
+
+        var value = this.factory.getItem(key);
+
+        return (typeof value !== 'undefined') ? value : defaultValue;
+    };
+
+    Boomerang.prototype.getAll = function () {
+
+        return this.factory.getAll();
+    };
+
+    Boomerang.prototype.getObject = function (key, defaultValue) {
+
+        var value = this.factory.getObject(key);
+
+        return (typeof value !== 'undefined') ? value : defaultValue;
     };
 
     Boomerang.prototype.clear = function () {

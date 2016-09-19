@@ -31,9 +31,24 @@ describe('LocalStorage Tests', function () {
         boomerang.set(key, value);
 
         if (boomerang.check()) {
-            // expect(boomerang.get(key)).toBe(value);
             assert.equal(boomerang.get(key), value, "We expect value to be " + value);
         }
+    });
+
+    it('Testing getAll()', function () {
+        var key_1 = 'boomerang_object_1',
+            value_1 = "boomerang_value_1",
+            key_2 = 'boomerang_object_2',
+            value_2 = "boomerang_value_2";
+
+        boomerang.set(key_1, value_1);
+        boomerang.set(key_2, value_2);
+
+        var items = boomerang.getAll();
+
+        assert.equal(items[key_1], value_1, 'We expect value to be ' + value_1);
+        assert.equal(items[key_2], value_2, 'We expect value to be ' + value_2);
+
     });
 
     it('Testing remove()', function() {
