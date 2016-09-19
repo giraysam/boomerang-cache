@@ -59,6 +59,16 @@
             localStorage.setItem(key, value);
         },
 
+        getObject: function (key, value) {
+            var obj = localStorage.getItem(key);
+            return JSON.parse(obj);
+        },
+
+        setObject: function (key, value) {
+            localStorage.removeItem(key);
+            localStorage.setItem(key, JSON.stringify(value));
+        },
+
         removeItem: function (key) {
             return localStorage.removeItem(key);
         },
@@ -106,7 +116,15 @@
     }
 
     Boomerang.prototype.get = function (key, defaultValue) {
+
         var value = this.factory.getItem(key);
+
+        return (typeof value !== 'undefined') ? value : defaultValue;
+    };
+
+    Boomerang.prototype.getObject = function (key, defaultValue) {
+
+        var value = this.factory.getObject(key);
 
         return (typeof value !== 'undefined') ? value : defaultValue;
     };
@@ -117,6 +135,13 @@
             return this.factory.removeItem(key);
         }
 
+        // if value is an array or object
+        if (typeof value === 'object') {
+            this.factory.setObject(key, value);
+            return value;
+        }
+
+        // if value is string
         this.factory.setItem(key, value);
         return value;
     };
