@@ -10,33 +10,21 @@ catch (ex) {
     console.log(ex);
 }
 
-suite('boomerang-cache', function () {
-    setup(function () {
+describe('Core -', function () {
 
-        try {
-            localStorage.clear();
-        }
-        catch (ex) {}
-    });
-
-    teardown(function() {
-        try {
-            localStorage.clear();
-        } catch(e) {}
-    });
-
-    test('Testing set() and get()', function () {
+    it('Testing set() and get()', function () {
         var key = "boomerang_key",
             value = "boomerang_value";
 
         boomerang.set(key, value);
 
         if (boomerang.check()) {
+            // expect(boomerang.get(key)).toBe(value);
             assert.equal(boomerang.get(key), value, "We expect value to be " + value);
         }
     });
 
-    test('Testing remove()', function() {
+    it('Testing remove()', function() {
         var key = 'boomerang_key',
             value = "boomerang_value";
 
@@ -45,7 +33,7 @@ suite('boomerang-cache', function () {
         assert.equal(boomerang.get(key), null, 'We expect value to be null');
     });
 
-    test('Testing clear()', function() {
+    it('Testing clear()', function() {
         var key = 'boomerang_key',
             value = "boomerang_value";
 
@@ -54,3 +42,4 @@ suite('boomerang-cache', function () {
         assert.equal(boomerang.get(key), null, 'We expect value to be null');
     });
 });
+
