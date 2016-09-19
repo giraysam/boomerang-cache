@@ -1,15 +1,13 @@
 {
   "framework": "mocha",
+  "before_tests": "./node_modules/.bin/grunt browserify",
   "serve_files": [ "test/browserified.js" ],
   "src_files": [
     "src/*.js",
     "test/*_tests.js"
   ],
   "launchers": {
-    "Mocha": {
-      "command": "node_modules/.bin/_mocha test/*_tests.js"
-    }
   },
   "on_exit": "rm test/browserified.js",
-  "launch_in_dev": ["Chrome", "Mocha"]
+  "launch_in_dev": ["Chrome"]
 }

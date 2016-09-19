@@ -1,5 +1,3 @@
-mocha.ui("tdd");
-
 var assert = require('assert');
 var boomerangCache = require('../src/boomerang-cache');
 
