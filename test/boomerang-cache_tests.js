@@ -8,7 +8,7 @@ catch (ex) {
     console.log(ex);
 }
 
-describe('LocalStorage -', function () {
+describe('LocalStorage Tests', function () {
 
     before(function() {
         try {
