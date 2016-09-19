@@ -17,10 +17,23 @@
 }(this, function () {
     'use strict';
 
-    var api = api || {};
+    var api, localStorageApi, utils;
 
-    api = {
+    utils = {
+        extend: function () {
+            for (var i = 1; i < arguments.length; i++) {
+                for (var key in arguments[i]) {
+                    if (arguments[i].hasOwnProperty(key)) {
+                        arguments[0][key] = arguments[i][key];
+                    }
+                }
+            }
 
+            return arguments[0];
+        }
+    };
+
+    localStorageApi = {
         check: function () {
 
             var key = '__boomerangCache__',
@@ -55,15 +68,45 @@
         }
     };
 
-    function Boomerang (store) {
+    api = {
 
-        if (api.check()) {
+        create: function (store, options) {
+            var defaultOptions = {
+                type: 'local'
+            };
+
+            options = utils.extend(defaultOptions, options);
+
+            return new Boomerang(store, options);
+        }
+    };
+    
+    function CacheFactory(cacheType) {
+        var cacheEngine;
+
+        if (cacheType == 'local') {
+            cacheEngine = localStorageApi;
+        }
+
+        return cacheEngine;
+    }
+
+    function Boomerang (store, options) {
+
+        this.options = options;
+        this.factory = new CacheFactory(this.options.type);
+
+        if (typeof this.factory == 'undefined') {
+            throw "Undefined factory";
+        }
+
+        if (this.factory.check()) {
             this._store = store;
         }
     }
 
     Boomerang.prototype.get = function (key, defaultValue) {
-        var value = api.getItem(key);
+        var value = this.factory.getItem(key);
 
         return (typeof value !== 'undefined') ? value : defaultValue;
     };
@@ -71,27 +114,23 @@
     Boomerang.prototype.set = function (key, value) {
 
         if (typeof value === 'undefined') {
-            return api.removeItem(key);
+            return this.factory.removeItem(key);
         }
 
-        api.setItem(key, value);
+        this.factory.setItem(key, value);
         return value;
     };
 
     Boomerang.prototype.clear = function () {
-        api.clear();
+        this.factory.clear();
     };
 
     Boomerang.prototype.remove = function (key) {
-        return api.removeItem(key);
+        return this.factory.removeItem(key);
     };
 
     Boomerang.prototype.check = function () {
-        return api.check();
-    };
-
-    api.create = function (store) {
-        return new Boomerang(store);
+        return this.factory.check();
     };
 
     return api;

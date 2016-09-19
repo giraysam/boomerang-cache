@@ -3,7 +3,12 @@ mocha.ui("tdd");
 var assert = require('assert');
 var boomerangCache = require('../src/boomerang-cache');
 
-var boomerang = boomerangCache.create('test1');
+try {
+    var boomerang = boomerangCache.create('test1');
+}
+catch (ex) {
+    console.log(ex);
+}
 
 suite('boomerang-cache', function () {
     setup(function () {
