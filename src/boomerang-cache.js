@@ -59,7 +59,7 @@
             localStorage.setItem(key, value);
         },
 
-        getObject: function (key, value) {
+        getObject: function (key) {
             var obj = localStorage.getItem(key);
             return JSON.parse(obj);
         },
