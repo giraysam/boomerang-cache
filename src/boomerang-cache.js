@@ -22,7 +22,41 @@
 }(this, function () {
     'use strict';
 
-    var api, utils;
+    var api, utils, expirePrefix;
+
+    expirePrefix = "__boomerangExpire__";
+
+    /**
+     * BoomerangCache main instance
+     *
+     * @param store
+     * @param options
+     * @constructor
+     */
+    function BoomerangCache(store, options) {
+
+        this.options = options;
+        this.storage = this.api[this.options.storage];
+
+        if (typeof this.storage == 'undefined') {
+            throw "Undefined factory";
+        }
+
+        if (this.storage.check()) {
+            this.namespace = utils.trim(store) != '' ? utils.trim(store) : 'BoomerangCache';
+        }
+    }
+
+    BoomerangCache.prototype.hasExpired = function (key) {
+        var expireKey = utils.expireKey(this.namespace, key),
+            expireValue = parseInt(this.storage.getItem(expireKey), 10);
+
+        if (expireValue && expireValue < utils.currentTime()) {
+            return true;
+        }
+
+        return false;
+    };
 
     /**
      * utils
@@ -51,6 +85,14 @@
 
             namespaceKey: function (namespace, key) {
                 return namespace + ":" + key;
+            },
+            
+            expireKey: function (namespace, key) {
+                return this.namespaceKey(namespace, expirePrefix + key);
+            },
+
+            currentTime: function () {
+                return new Date().getTime();
             }
         }
     }());
@@ -79,27 +121,6 @@
             }
         }
     }());
-
-    /**
-     * BoomerangCache main instance
-     *
-     * @param store
-     * @param options
-     * @constructor
-     */
-    function BoomerangCache(store, options) {
-
-        this.options = options;
-        this.storage = this.api[this.options.storage];
-
-        if (typeof this.storage == 'undefined') {
-            throw "Undefined factory";
-        }
-
-        if (this.storage.check()) {
-            this.namespace = utils.trim(store) != '' ? utils.trim(store) : 'BoomerangCache';
-        }
-    }
 
     BoomerangCache.prototype.api = {
 
@@ -240,9 +261,19 @@
      * @param value
      * @returns {*}
      */
-    BoomerangCache.prototype.set = function(key, value) {
+    BoomerangCache.prototype.set = function(key, value, seconds) {
 
         key = utils.namespaceKey(this.namespace, key);
+        var expireKey = utils.expireKey(this.namespace, key);
+
+        if (seconds) {
+            var s = seconds * 1000;
+
+            this.storage.setItem(expireKey, utils.currentTime() + s);
+        }
+        else {
+            this.storage.removeItem(expireKey);
+        }
 
         if (typeof value === 'undefined') {
             return this.storage.removeItem(key);
@@ -268,9 +299,15 @@
      */
     BoomerangCache.prototype.get = function(key, defaultValue) {
 
-        key = utils.namespaceKey(this.namespace, key);
+        var namespaceKey = utils.namespaceKey(this.namespace, key);
 
-        var value = this.storage.getItem(key);
+        if (this.hasExpired(namespaceKey)) {
+            this.storage.removeItem(namespaceKey);
+            this.storage.removeItem(utils.expireKey(this.namespace, key));
+            return null;
+        }
+
+        var value = this.storage.getItem(namespaceKey);
 
         // check if item is an object
         if (typeof value !== 'undefined' || value != null) {

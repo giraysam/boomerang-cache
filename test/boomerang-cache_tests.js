@@ -17,14 +17,14 @@ catch (ex) {
 
 describe('LocalStorage Tests', function () {
 
-    before(function() {
+    beforeEach(function() {
         try {
             localStorage.clear();
         }
         catch (ex) {}
     });
 
-    after(function() {
+    afterEach(function() {
         try {
             localStorage.clear();
         }
@@ -61,6 +61,22 @@ describe('LocalStorage Tests', function () {
 
         boomerangLocal.set(key, value);
         assert.deepEqual(boomerangLocal.get(key), value, "We expect type of value to be " + typeof(value));
+    });
+
+    it('Testing set() has expire', function() {
+        var key = 'boomerang_object',
+            value = "boomerang_value";
+
+        boomerangLocal.set(key, value, -1);
+        assert.equal(boomerangLocal.get(key), null, "We expect type of value to be null");
+    });
+
+    it('Testing set() has not expire', function() {
+        var key = 'boomerang_object',
+            value = "boomerang_value";
+
+        boomerangLocal.set(key, value, 1);
+        assert.notEqual(boomerangLocal.get(key), null, "We expect type of value to be not null");
     });
 
     it('Testing getAll()', function () {
@@ -154,6 +170,22 @@ describe('SessionStorage Tests', function () {
 
         boomerangSession.set(key, value);
         assert.deepEqual(boomerangSession.get(key), value, "We expect type of value to be " + typeof(value));
+    });
+
+    it('Testing set() has expire', function() {
+        var key = 'boomerang_object',
+            value = "boomerang_value";
+
+        boomerangSession.set(key, value, -1);
+        assert.equal(boomerangSession.get(key), null, "We expect type of value to be null");
+    });
+
+    it('Testing set() has not expire', function() {
+        var key = 'boomerang_object',
+            value = "boomerang_value";
+
+        boomerangSession.set(key, value, 1);
+        assert.notEqual(boomerangSession.get(key), null, "We expect type of value to be not null");
     });
 
     it('Testing getAll()', function () {
