@@ -311,13 +311,6 @@
     };
 
     /**
-     * clear
-     */
-    BoomerangCache.prototype.clear = function() {
-        this.storage.clear();
-    };
-
-    /**
      * remove
      *
      * @param key
@@ -328,6 +321,23 @@
         key = utils.namespaceKey(this.namespace, key);
 
         return this.storage.removeItem(key);
+    };
+
+    /**
+     * length
+     *
+     * @returns Number
+     */
+    BoomerangCache.prototype.length = function() {
+
+        return Object.keys(this.storage.getAll(this.namespace)).length;
+    };
+
+    /**
+     * clear
+     */
+    BoomerangCache.prototype.clear = function() {
+        this.storage.clear();
     };
 
     /**
