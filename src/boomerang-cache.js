@@ -43,6 +43,10 @@
                 }
 
                 return arguments[0];
+            },
+
+            trim: function(x) {
+                return x.replace(/^\s+|\s+$/gm,'');
             }
         }
     }());
@@ -168,7 +172,7 @@
         }
 
         if (this.factory.check()) {
-            this._store = store;
+            this.store = utils.trim(store);
         }
     }
 
