@@ -1,3 +1,8 @@
+/**
+ * Boomerang Cache
+ *
+ * Boomerang Cache is a client side caching library
+ */
 (function (root, factory) {
 
     if (typeof exports !== 'undefined') {
@@ -19,104 +24,144 @@
 
     var api, localStorageApi, utils;
 
-    utils = {
-        extend: function () {
-            for (var i = 1; i < arguments.length; i++) {
-                for (var key in arguments[i]) {
-                    if (arguments[i].hasOwnProperty(key)) {
-                        arguments[0][key] = arguments[i][key];
+    /**
+     * utils
+     *
+     * @type {{extend}}
+     */
+    utils = (function() {
+
+        return {
+
+            extend: function() {
+                for (var i = 1; i < arguments.length; i++) {
+                    for (var key in arguments[i]) {
+                        if (arguments[i].hasOwnProperty(key)) {
+                            arguments[0][key] = arguments[i][key];
+                        }
                     }
                 }
+
+                return arguments[0];
             }
-
-            return arguments[0];
         }
-    };
+    }());
 
-    localStorageApi = {
-        check: function () {
+    /**
+     * localStorageApi
+     *
+     * @type {{check, getItem, setItem, getAll, getObject, setObject, removeItem, clear}}
+     */
+    localStorageApi = (function() {
 
-            var key = '__boomerangCache__',
-                value = 'boomerang';
+        return {
 
-            try {
-                localStorage.setItem(key, value);
+            check: function() {
+
+                var key = '__boomerangCache__',
+                    value = 'boomerang';
+
+                try {
+                    localStorage.setItem(key, value);
+                    localStorage.removeItem(key);
+                    return true;
+                }
+                catch (exc) {
+                    console.log('error');
+                    return false;
+                }
+            },
+
+            getItem: function(key) {
+                return localStorage.getItem(key);
+            },
+
+            setItem: function(key, value) {
                 localStorage.removeItem(key);
-                return true;
+                localStorage.setItem(key, value);
+            },
+
+            getAll: function() {
+                var keys = Object.keys(localStorage),
+                    values = {},
+                    i = keys.length;
+
+                while (i--) {
+                    values[keys[i]] = localStorage.getItem(keys[i]);
+                }
+
+                return values;
+            },
+
+            getObject: function(key) {
+                var obj = localStorage.getItem(key);
+                return JSON.parse(obj);
+            },
+
+            setObject: function(key, value) {
+                localStorage.removeItem(key);
+                localStorage.setItem(key, JSON.stringify(value));
+            },
+
+            removeItem: function(key) {
+                return localStorage.removeItem(key);
+            },
+
+            clear: function() {
+                localStorage.clear();
             }
-            catch (exc) {
-                console.log('error');
-                return false;
+        }
+    }());
+
+    /**
+     * api
+     *
+     * @type {{create}}
+     */
+    api = (function() {
+
+        return {
+
+            create: function(store, options) {
+                var defaultOptions = {
+                    type: 'local'
+                };
+
+                options = utils.extend(defaultOptions, options);
+
+                return new Boomerang(store, options);
             }
-        },
-
-        getItem: function (key) {
-            return localStorage.getItem(key);
-        },
-
-        setItem: function (key, value) {
-            localStorage.removeItem(key);
-            localStorage.setItem(key, value);
-        },
-        
-        getAll: function () {
-            var keys = Object.keys(localStorage),
-                values = {},
-                i = keys.length;
-
-            while(i--) {
-                values[keys[i]] = localStorage.getItem(keys[i]);
-            }
-
-            return values;
-        },
-
-        getObject: function (key) {
-            var obj = localStorage.getItem(key);
-            return JSON.parse(obj);
-        },
-
-        setObject: function (key, value) {
-            localStorage.removeItem(key);
-            localStorage.setItem(key, JSON.stringify(value));
-        },
-
-        removeItem: function (key) {
-            return localStorage.removeItem(key);
-        },
-
-        clear: function () {
-            localStorage.clear();
         }
-    };
+    }());
 
-    api = {
+    /**
+     * ApiFactory
+     *
+     * @param apiType
+     * @returns {*}
+     * @constructor
+     */
+    function ApiFactory(apiType) {
+        var engine;
 
-        create: function (store, options) {
-            var defaultOptions = {
-                type: 'local'
-            };
-
-            options = utils.extend(defaultOptions, options);
-
-            return new Boomerang(store, options);
-        }
-    };
-    
-    function CacheFactory(cacheType) {
-        var cacheEngine;
-
-        if (cacheType == 'local') {
-            cacheEngine = localStorageApi;
+        if (apiType == 'local') {
+            engine = localStorageApi;
         }
 
-        return cacheEngine;
+        return engine;
     }
 
-    function Boomerang (store, options) {
+    /**
+     * Boomerang main instance
+     *
+     * @param store
+     * @param options
+     * @constructor
+     */
+    function Boomerang(store, options) {
 
         this.options = options;
-        this.factory = new CacheFactory(this.options.type);
+        this.factory = new ApiFactory(this.options.type);
 
         if (typeof this.factory == 'undefined') {
             throw "Undefined factory";
@@ -127,7 +172,14 @@
         }
     }
 
-    Boomerang.prototype.set = function (key, value) {
+    /**
+     * set
+     *
+     * @param key
+     * @param value
+     * @returns {*}
+     */
+    Boomerang.prototype.set = function(key, value) {
 
         if (typeof value === 'undefined') {
             return this.factory.removeItem(key);
@@ -144,34 +196,67 @@
         return value;
     };
 
-    Boomerang.prototype.get = function (key, defaultValue) {
+    /**
+     * get
+     *
+     * @param key
+     * @param defaultValue
+     * @returns {*}
+     */
+    Boomerang.prototype.get = function(key, defaultValue) {
 
         var value = this.factory.getItem(key);
 
         return (typeof value !== 'undefined') ? value : defaultValue;
     };
 
-    Boomerang.prototype.getAll = function () {
+    /**
+     * getAll
+     *
+     * @returns {*}
+     */
+    Boomerang.prototype.getAll = function() {
 
         return this.factory.getAll();
     };
 
-    Boomerang.prototype.getObject = function (key, defaultValue) {
+    /**
+     * getObject
+     *
+     * @param key
+     * @param defaultValue
+     * @returns {*}
+     */
+    Boomerang.prototype.getObject = function(key, defaultValue) {
 
         var value = this.factory.getObject(key);
 
         return (typeof value !== 'undefined') ? value : defaultValue;
     };
 
-    Boomerang.prototype.clear = function () {
+    /**
+     * clear
+     */
+    Boomerang.prototype.clear = function() {
         this.factory.clear();
     };
 
-    Boomerang.prototype.remove = function (key) {
+    /**
+     * remove
+     *
+     * @param key
+     * @returns {*}
+     */
+    Boomerang.prototype.remove = function(key) {
         return this.factory.removeItem(key);
     };
 
-    Boomerang.prototype.check = function () {
+    /**
+     * check browser support
+     *
+     * @returns true|false
+     */
+    Boomerang.prototype.check = function() {
         return this.factory.check();
     };
 
