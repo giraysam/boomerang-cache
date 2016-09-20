@@ -8,20 +8,26 @@ API Reference
 * * *
 
 ### BoomerangCache.create
+
 > Creates a new bucket.
+
 #### Arguments
+
 1. `bucket` (**String**)
 2. `options` (**Object**)
     * `type`: (**local** | **session**)
 
-
 ### BoomerangCache.set
+
 > Set a key to a particular value or a hash object (Object or Array) under a hash key.
+
 #### Arguments
+
 1. `key` (**String**)
 2. `value` (**String**, **Number**, **Object**, **Array**)
 
 *Example*
+
 ```js
 boomerang.set('stringData', 'Hello World');
 boomerang.set('numberData', 12345);
