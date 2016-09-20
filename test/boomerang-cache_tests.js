@@ -66,20 +66,28 @@ describe('LocalStorage Tests', function () {
         assert.equal(boomerang.get(key), null, 'We expect value to be null');
     });
 
-    it('Testing arrays with set() and get()', function() {
+    it('Testing number with set() and get()', function() {
+        var key = 'boomerang_array',
+            value = 123456789;
+
+        boomerang.set(key, value);
+        assert.equal(boomerang.get(key), value, "We expect value to be " + value);
+    });
+
+    it('Testing array with set() and get()', function() {
         var key = 'boomerang_array',
             value = [{value: "boomerang_value"}];
 
         boomerang.set(key, value);
-        assert.deepEqual(boomerang.getObject(key), value, "We expect type of value to be " + typeof(value));
+        assert.deepEqual(boomerang.get(key), value, "We expect type of value to be " + typeof(value));
     });
 
-    it('Testing objects with set() and get()', function() {
+    it('Testing object with set() and get()', function() {
         var key = 'boomerang_object',
             value = {value: "boomerang_value"};
 
         boomerang.set(key, value);
-        assert.deepEqual(boomerang.getObject(key), value, "We expect type of value to be " + typeof(value));
+        assert.deepEqual(boomerang.get(key), value, "We expect type of value to be " + typeof(value));
     });
 });
 
