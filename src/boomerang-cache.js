@@ -97,7 +97,7 @@
         }
 
         if (this.storage.check()) {
-            this.namespace = utils.trim(store) != '' ? utils.trim(store) : 'BoomerangCache-cache';
+            this.namespace = utils.trim(store) != '' ? utils.trim(store) : 'BoomerangCache';
         }
     }
 
@@ -162,6 +162,68 @@
 
             clear: function() {
                 localStorage.clear();
+            }
+        },
+
+        session: {
+
+            check: function() {
+
+                var key = '__BoomerangCacheCache__',
+                    value = 'BoomerangCache';
+
+                try {
+                    sessionStorage.setItem(key, value);
+                    sessionStorage.removeItem(key);
+                    return true;
+                }
+                catch (exc) {
+                    console.log('error');
+                    return false;
+                }
+            },
+
+            getItem: function(key) {
+                return sessionStorage.getItem(key);
+            },
+
+            setItem: function(key, value) {
+                sessionStorage.removeItem(key);
+                sessionStorage.setItem(key, value);
+            },
+
+            getAll: function(namespace) {
+                var keys = Object.keys(sessionStorage),
+                    values = {},
+                    i = keys.length;
+
+                while (i--) {
+                    var keySplit = keys[i].split(':');
+
+                    if (keySplit[0] == namespace) {
+                        values[keySplit[1]] = sessionStorage.getItem(keys[i]);
+                    }
+                }
+
+                return values;
+            },
+
+            getObject: function(key) {
+                var obj = sessionStorage.getItem(key);
+                return JSON.parse(obj);
+            },
+
+            setObject: function(key, value) {
+                sessionStorage.removeItem(key);
+                sessionStorage.setItem(key, JSON.stringify(value));
+            },
+
+            removeItem: function(key) {
+                return sessionStorage.removeItem(key);
+            },
+
+            clear: function() {
+                sessionStorage.clear();
             }
         }
     };
