@@ -47,6 +47,10 @@
 
             trim: function(x) {
                 return x.replace(/^\s+|\s+$/gm,'');
+            },
+
+            namespaceKey: function (namespace, key) {
+                return namespace + ":" + key;
             }
         }
     }());
@@ -85,13 +89,17 @@
                 localStorage.setItem(key, value);
             },
 
-            getAll: function() {
+            getAll: function(namespace) {
                 var keys = Object.keys(localStorage),
                     values = {},
                     i = keys.length;
 
                 while (i--) {
-                    values[keys[i]] = localStorage.getItem(keys[i]);
+                    var keySplit = keys[i].split(':');
+
+                    if (keySplit[0] == namespace) {
+                        values[keySplit[1]] = localStorage.getItem(keys[i]);
+                    }
                 }
 
                 return values;
@@ -172,7 +180,7 @@
         }
 
         if (this.factory.check()) {
-            this.store = utils.trim(store);
+            this.namespace = utils.trim(store) != '' ? utils.trim(store) : 'boomerang-cache';
         }
     }
 
@@ -184,6 +192,8 @@
      * @returns {*}
      */
     Boomerang.prototype.set = function(key, value) {
+
+        key = utils.namespaceKey(this.namespace, key);
 
         if (typeof value === 'undefined') {
             return this.factory.removeItem(key);
@@ -209,6 +219,8 @@
      */
     Boomerang.prototype.get = function(key, defaultValue) {
 
+        key = utils.namespaceKey(this.namespace, key);
+
         var value = this.factory.getItem(key);
 
         return (typeof value !== 'undefined') ? value : defaultValue;
@@ -221,7 +233,7 @@
      */
     Boomerang.prototype.getAll = function() {
 
-        return this.factory.getAll();
+        return this.factory.getAll(this.namespace);
     };
 
     /**
@@ -232,6 +244,8 @@
      * @returns {*}
      */
     Boomerang.prototype.getObject = function(key, defaultValue) {
+
+        key = utils.namespaceKey(this.namespace, key);
 
         var value = this.factory.getObject(key);
 
@@ -252,6 +266,9 @@
      * @returns {*}
      */
     Boomerang.prototype.remove = function(key) {
+
+        key = utils.namespaceKey(this.namespace, key);
+
         return this.factory.removeItem(key);
     };
 

@@ -1,8 +1,8 @@
 var assert = require('assert');
-var boomerangCache = require('../src/boomerang-cache');
+var BoomerangCache = require('../src/boomerang-cache');
 
 try {
-    var boomerang = boomerangCache.create('test1');
+    var boomerang = BoomerangCache.create("boomerang");
 }
 catch (ex) {
     console.log(ex);
