@@ -223,6 +223,16 @@
 
         var value = this.factory.getItem(key);
 
+        // check if item is an object
+        if (typeof value !== 'undefined' || value != null) {
+            try {
+                var objValue = JSON.parse(value);
+                return objValue
+            } catch (e) {
+                
+            }
+        }
+
         return (typeof value !== 'undefined') ? value : defaultValue;
     };
 
