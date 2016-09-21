@@ -1,0 +1,31 @@
+{
+    "title": "Boomerang Cache",
+    "tagline": "Boomerang-Cache Documentation",
+    "author": "giraysam and feyyazakkus",
+    "image": "app.png",
+    "ignore": {
+            "files": ["Work_In_Progress.md"],
+            "folders": ["99_Not_Ready"]
+    },
+    "live": {
+        "clean_urls": true
+    },
+    "html": {
+        "theme": "daux-green",
+        "breadcrumbs": true,
+        "breadcrumb_separator": "Chevrons",
+        "toggle_code": true,
+        "date_modified": true,
+        "float": true,
+        "inherit_index": true,
+        "search": true,
+
+        "repo": "giraysam/boomerang-cache",
+        "google_analytics": "UA-12653604-10",
+        "links": {
+            "Download": "https://github.com/giraysam/boomerang-cache/releases/latest",
+            "GitHub Repo": "https://github.com/giraysam/boomerang-cache",
+            "Help/Support/Bugs": "https://github.com/giraysam/boomerang-cache/issues"
+        }
+    }
+}
