@@ -332,22 +332,6 @@
     };
 
     /**
-     * getObject
-     *
-     * @param key
-     * @param defaultValue
-     * @returns {*}
-     */
-    BoomerangCache.prototype.getObject = function(key, defaultValue) {
-
-        key = utils.namespaceKey(this.namespace, key);
-
-        var value = this.storage.getObject(key);
-
-        return (typeof value !== 'undefined') ? value : defaultValue;
-    };
-
-    /**
      * remove
      *
      * @param key
