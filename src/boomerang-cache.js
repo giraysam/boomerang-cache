@@ -1,7 +1,7 @@
 /**
  * BoomerangCache Cache
  *
- * BoomerangCache Cache is a client side caching library
+ * BoomerangCache is a client side caching library
  */
 (function (root, factory) {
 
@@ -12,11 +12,11 @@
     }
     else if (typeof define === 'function' && define.amd) {
         define(['exports'], function (exports) {
-            root.BoomerangCacheCache = factory(root, exports);
+            root.BoomerangCache = factory(root, exports);
         });
     }
     else {
-        root.BoomerangCacheCache = factory(root, {});
+        root.BoomerangCache = factory(root, {});
     }
 
 }(this, function () {
