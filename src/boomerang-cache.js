@@ -263,7 +263,7 @@
      */
     BoomerangCache.prototype.set = function(key, value, seconds) {
 
-        key = utils.namespaceKey(this.namespace, key);
+        var namespaceKey = utils.namespaceKey(this.namespace, key);
         var expireKey = utils.expireKey(this.namespace, key);
 
         if (seconds) {
@@ -276,17 +276,17 @@
         }
 
         if (typeof value === 'undefined') {
-            return this.storage.removeItem(key);
+            return this.storage.removeItem(namespaceKey);
         }
 
         // if value is an array or object
         if (typeof value === 'object') {
-            this.storage.setObject(key, value);
+            this.storage.setObject(namespaceKey, value);
             return value;
         }
 
         // if value is string
-        this.storage.setItem(key, value);
+        this.storage.setItem(namespaceKey, value);
         return value;
     };
 
@@ -301,7 +301,7 @@
 
         var namespaceKey = utils.namespaceKey(this.namespace, key);
 
-        if (this.hasExpired(namespaceKey)) {
+        if (this.hasExpired(key)) {
             this.storage.removeItem(namespaceKey);
             this.storage.removeItem(utils.expireKey(this.namespace, key));
             return null;
@@ -340,7 +340,6 @@
     BoomerangCache.prototype.remove = function(key) {
 
         key = utils.namespaceKey(this.namespace, key);
-
         return this.storage.removeItem(key);
     };
 
