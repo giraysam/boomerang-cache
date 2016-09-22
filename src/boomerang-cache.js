@@ -128,7 +128,7 @@
 
             check: function() {
 
-                var key = '__BoomerangCacheCache__',
+                var key = '__BoomerangCache__',
                     value = 'BoomerangCache';
 
                 try {
@@ -190,7 +190,7 @@
 
             check: function() {
 
-                var key = '__BoomerangCacheCache__',
+                var key = '__BoomerangCache__',
                     value = 'BoomerangCache';
 
                 try {
