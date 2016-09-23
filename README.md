@@ -1,6 +1,23 @@
-# boomerang-cache - [![Build Status](https://travis-ci.org/giraysam/boomerang-cache.svg?branch=master)](https://travis-ci.org/giraysam/boomerang-cache)
+![boomerang-cache](https://raw.githubusercontent.com/giraysam/boomerang-cache/master/docs/app-thumbs.png)
+
 boomerangCache is a client side caching library based on localStorage
 
+[![npm Version][npm-badge]][npm]
+[![Build Status][travis-badge]][travis]
+[![Code Triagers Badge][code-triagers-badge]][code-triagers]
+
+#### How to install?
+Npm:
+```sh
+npm install boomerang-cache
+```
+
+Bower:
+```sh
+bower install boomerang-cache
+```
+
+### Docs
 [https://giraysam.github.io/boomerang-cache](https://giraysam.github.io/boomerang-cache)
 
 API Reference
@@ -115,3 +132,10 @@ boomerang.remove('key');
 ```js
 boomerang.clear();
 ```
+
+[npm]: https://www.npmjs.org/package/boomerang-cache
+[npm-badge]: https://img.shields.io/npm/v/boomerang-cache.svg?style=flat-square
+[travis]: https://travis-ci.org/giraysam/boomerang-cache
+[travis-badge]: https://travis-ci.org/giraysam/boomerang-cache.svg?branch=master
+[code-triagers]: https://www.codetriage.com/giraysam/boomerang-cache
+[code-triagers-badge]: https://www.codetriage.com/giraysam/boomerang-cache/badges/users.svg
