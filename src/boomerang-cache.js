@@ -22,9 +22,7 @@
 }(this, function () {
     'use strict';
 
-    var api, utils, expirePrefix;
-
-    expirePrefix = "__boomerangExpire__";
+    var api, utils;
 
     /**
      * BoomerangCache main instance
@@ -48,11 +46,16 @@
     }
 
     BoomerangCache.prototype.hasExpired = function (key) {
-        var expireKey = utils.expireKey(this.namespace, key),
-            expireValue = parseInt(this.storage.getItem(expireKey), 10);
 
-        if (expireValue && expireValue < utils.currentTime()) {
-            return true;
+        var itemValue = JSON.parse(this.storage.getItem(key)),
+            expireValue;
+
+        if (itemValue && itemValue['expiry']) {
+            expireValue = parseInt(itemValue['expiry'], 10);
+
+            if (expireValue && expireValue < utils.currentTime()) {
+                return true;
+            }
         }
 
         return false;
@@ -85,10 +88,6 @@
 
             namespaceKey: function (namespace, key) {
                 return namespace + ":" + key;
-            },
-            
-            expireKey: function (namespace, key) {
-                return this.namespaceKey(namespace, expirePrefix + key);
             },
 
             currentTime: function () {
@@ -160,7 +159,7 @@
                     var keySplit = keys[i].split(':');
 
                     if (keySplit[0] == namespace) {
-                        values[keySplit[1]] = localStorage.getItem(keys[i]);
+                        values[keySplit[1]] = JSON.parse(localStorage.getItem(keys[i]))['value'];
                     }
                 }
 
@@ -170,11 +169,6 @@
             getObject: function(key) {
                 var obj = localStorage.getItem(key);
                 return JSON.parse(obj);
-            },
-
-            setObject: function(key, value) {
-                localStorage.removeItem(key);
-                localStorage.setItem(key, JSON.stringify(value));
             },
 
             removeItem: function(key) {
@@ -222,7 +216,7 @@
                     var keySplit = keys[i].split(':');
 
                     if (keySplit[0] == namespace) {
-                        values[keySplit[1]] = sessionStorage.getItem(keys[i]);
+                        values[keySplit[1]] = JSON.parse(sessionStorage.getItem(keys[i]))['value'];
                     }
                 }
 
@@ -232,11 +226,6 @@
             getObject: function(key) {
                 var obj = sessionStorage.getItem(key);
                 return JSON.parse(obj);
-            },
-
-            setObject: function(key, value) {
-                sessionStorage.removeItem(key);
-                sessionStorage.setItem(key, JSON.stringify(value));
             },
 
             removeItem: function(key) {
@@ -263,30 +252,22 @@
      */
     BoomerangCache.prototype.set = function(key, value, seconds) {
 
-        var namespaceKey = utils.namespaceKey(this.namespace, key);
-        var expireKey = utils.expireKey(this.namespace, key);
+        var namespaceKey = utils.namespaceKey(this.namespace, key),
+            itemValue = {
+                value: value
+            };
 
         if (seconds) {
             var s = seconds * 1000;
-
-            this.storage.setItem(expireKey, utils.currentTime() + s);
-        }
-        else {
-            this.storage.removeItem(expireKey);
+            itemValue['expiry'] = utils.currentTime() + s;
         }
 
         if (typeof value === 'undefined') {
             return this.storage.removeItem(namespaceKey);
         }
 
-        // if value is an array or object
-        if (typeof value === 'object') {
-            this.storage.setObject(namespaceKey, value);
-            return value;
-        }
-
         // if value is string
-        this.storage.setItem(namespaceKey, value);
+        this.storage.setItem(namespaceKey, JSON.stringify(itemValue));
         return value;
     };
 
@@ -301,24 +282,24 @@
 
         var namespaceKey = utils.namespaceKey(this.namespace, key);
 
-        if (this.hasExpired(key)) {
+        if (this.hasExpired(namespaceKey)) {
             this.storage.removeItem(namespaceKey);
-            this.storage.removeItem(utils.expireKey(this.namespace, key));
             return null;
         }
 
-        var value = this.storage.getItem(namespaceKey);
+        var itemValue = JSON.parse(this.storage.getItem(namespaceKey));
 
         // check if item is an object
-        if (typeof value !== 'undefined' || value != null) {
+        if (itemValue && (typeof itemValue['value'] !== 'undefined' || itemValue['value'] != null)) {
 
             try {
-                return JSON.parse(value);
+                return itemValue['value'];
             }
             catch (e) {}
         }
-
-        return (typeof value !== 'undefined') ? value : defaultValue;
+        else {
+            return defaultValue || null;
+        }
     };
 
     /**
