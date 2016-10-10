@@ -91,7 +91,6 @@ boomerang.set('key', 'Hello World', seconds);
 
 ```js
 boomerang.get('key', 'Hello World'); // If value is null returns Hello World.
-boomerang.set('key'); // returns value
 ```
 
 ### BoomerangCache.getAll
