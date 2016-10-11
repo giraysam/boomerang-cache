@@ -1,12 +1,11 @@
-![boomerang-cache](https://raw.githubusercontent.com/giraysam/boomerang-cache/master/docs/app-thumbs.png)
+# Boomerang Cache
+boomerangCache is a client side caching library based on localStorage.
 
-boomerangCache is a client side caching library based on localStorage
+[![NPM](https://nodei.co/npm/boomerang-cache.png?compact=true)](https://www.npmjs.com/package/boomerang-cache)
 
 [![npm version][npm-badge-v]][npm] 
 [![npm downloads][npm-badge-dm]][npm] 
 [![build status][travis-badge]][travis] 
-[![dependency status][dependency-status-badge]][dependency] 
-[![devDependency status][devDependency-status-badge]][devDependency] 
 [![js-standard-style][code-standart-badge]](https://github.com/giraysam/boomerang-cache)
 
 #### How to install?
@@ -140,8 +139,4 @@ boomerang.clear();
 [npm-badge-dm]: https://img.shields.io/npm/dm/boomerang-cache.svg?style=flat-square
 [travis]: https://travis-ci.org/giraysam/boomerang-cache
 [travis-badge]: https://travis-ci.org/giraysam/boomerang-cache.svg?branch=master
-[dependency]: https://david-dm.org/giraysam/boomerang-cache
-[dependency-status-badge]: https://img.shields.io/david/giraysam/boomerang-cache.svg?style=flat-square
-[devDependency]: https://david-dm.org/giraysam/boomerang-cache#info=devDependencies
-[devDependency-status-badge]: https://img.shields.io/david/dev/giraysam/boomerang-cache.svg?style=flat-square
 [code-standart-badge]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
