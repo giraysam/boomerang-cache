@@ -1,6 +1,6 @@
 {
   "name": "boomerang-cache",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "boomerangCache is a client side caching library based on localStorage",
   "main": "src/boomerang-cache.js",
   "directories": {
@@ -27,5 +27,8 @@
     "grunt-contrib-uglify": "^2.0.0",
     "mocha": "~3.0.2",
     "mock-local-storage": "^1.0.2"
+  },
+  "dependencies": {
+    "docdash": "^0.4.0"
   }
 }
