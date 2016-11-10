@@ -43,11 +43,12 @@ API Reference
 
 1. `bucket` (**String**)
 2. `options` (**Object**)
-    * `type`: (**local** | **session**)
+    * `storage`: (**local** | **session**)
+    * `encrypt`: (**true** | **false**)
 
  
 ```js
-var boomerang = BoomerangCache.create('bucket_1');
+var boomerang = BoomerangCache.create('bucket1', {storage: 'local', encrypt: true});
 ```
 
 ### BoomerangCache.set
