@@ -143,7 +143,7 @@ CryptoJS.lib.Cipher||function(u){var p=CryptoJS,d=p.lib,l=d.Base,s=d.WordArray,t
      * @name BoomerangCache Api
      *
      * @namespace BoomerangCache
-     * @version 1.1.0
+     * @version 1.2.0
      * @copyright 2016
      * @author [giraysam]{@link http://giraysam.github.io} - [feyyazakkus]{@link https://github.com/feyyazakkus}
      * @file
@@ -470,7 +470,10 @@ CryptoJS.lib.Cipher||function(u){var p=CryptoJS,d=p.lib,l=d.Base,s=d.WordArray,t
      * boomerang.clear();
      */
     BoomerangCache.prototype.clear = function() {
-        this.storage.clear();
+        var items = Object.keys(this.storage.getAll(this.namespace, this.options.encrypt));
+        for (var i = 0; i < items.length; i++) {
+            this.remove(items[i]);
+        }
     };
 
     /**
